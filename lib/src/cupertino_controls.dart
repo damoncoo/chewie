@@ -10,6 +10,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:open_iconic_flutter/open_iconic_flutter.dart';
 import 'package:video_player/video_player.dart';
+// import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:progress_hud/progress_hud.dart';
 
 class CupertinoControls extends StatefulWidget {
   const CupertinoControls({
@@ -41,6 +43,10 @@ class _CupertinoControlsState extends State<CupertinoControls> {
   @override
   Widget build(BuildContext context) {
     chewieController = ChewieController.of(context);
+
+    if (controller.value.isBuffering && controller.value.isPlaying) {
+      return _buildLoadingWidget();
+    }
 
     if (_latestValue.hasError) {
       return chewieController.errorBuilder != null
@@ -158,6 +164,16 @@ class _CupertinoControlsState extends State<CupertinoControls> {
         ),
       ),
     );
+  }
+
+  Widget _buildLoadingWidget() {
+    return Container(
+        child: ProgressHUD(
+      backgroundColor: Colors.black12,
+      color: Colors.white,
+      containerColor: Color(0x00ffffff),
+      borderRadius: 5.0,
+    ));
   }
 
   Widget _buildLive(Color iconColor) {
@@ -294,15 +310,15 @@ class _CupertinoControlsState extends State<CupertinoControls> {
         height: barHeight,
         color: Colors.transparent,
         padding: EdgeInsets.only(
-          left: 6.0,
-          right: 6.0,
+          left: 10.0,
+          right: 10.0,
         ),
         child: Icon(
           controller.value.isPlaying
               ? OpenIconicIcons.mediaPause
               : OpenIconicIcons.mediaPlay,
           color: iconColor,
-          size: 16.0,
+          size: 20.0,
         ),
       ),
     );

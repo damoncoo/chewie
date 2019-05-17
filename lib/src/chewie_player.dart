@@ -71,9 +71,12 @@ class ChewieState extends State<Chewie> {
   Widget build(BuildContext context) {
     return _ChewieControllerProvider(
       controller: widget.controller,
-      child: PlayerWithControls(),
+      child: Stack(
+        children: <Widget>[PlayerWithControls()],
+      ),
     );
   }
+
 
   Widget _buildFullScreenVideo(
       BuildContext context,
@@ -166,35 +169,35 @@ class ChewieState extends State<Chewie> {
 /// player, please use the standard information provided by the
 /// `VideoPlayerController`.
 class ChewieController extends ChangeNotifier {
-  ChewieController({
-    this.videoPlayerController,
-    this.aspectRatio,
-    this.autoInitialize = false,
-    this.autoPlay = false,
-    this.startAt,
-    this.looping = false,
-    this.fullScreenByDefault = false,
-    this.cupertinoProgressColors,
-    this.materialProgressColors,
-    this.placeholder,
-    this.overlay,
-    this.showControls = true,
-    this.customControls,
-    this.errorBuilder,
-    this.allowedScreenSleep = true,
-    this.isLive = false,
-    this.allowFullScreen = true,
-    this.allowMuting = true,
-    this.systemOverlaysAfterFullScreen = SystemUiOverlay.values,
-    this.deviceOrientationsAfterFullScreen = const [
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ],
-    this.routePageBuilder = null,
-    this.title
-  }) : assert(videoPlayerController != null,
+  ChewieController(
+      {this.videoPlayerController,
+      this.aspectRatio,
+      this.autoInitialize = false,
+      this.autoPlay = false,
+      this.startAt,
+      this.looping = false,
+      this.fullScreenByDefault = false,
+      this.cupertinoProgressColors,
+      this.materialProgressColors,
+      this.placeholder,
+      this.overlay,
+      this.showControls = true,
+      this.customControls,
+      this.errorBuilder,
+      this.allowedScreenSleep = true,
+      this.isLive = false,
+      this.allowFullScreen = true,
+      this.allowMuting = true,
+      this.systemOverlaysAfterFullScreen = SystemUiOverlay.values,
+      this.deviceOrientationsAfterFullScreen = const [
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ],
+      this.routePageBuilder = null,
+      this.title})
+      : assert(videoPlayerController != null,
             'You must provide a controller to play a video') {
     _initialize();
   }

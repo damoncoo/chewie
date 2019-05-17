@@ -32,7 +32,12 @@ class PlayerWithControls extends StatelessWidget {
     return Container(
       child: Stack(
         children: <Widget>[
-          chewieController.placeholder ?? Container(),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.width * 2 / 3,
+            child: chewieController.placeholder ?? Container(),
+          ),
+          // chewieController.placeholder ?? Container(),
           Center(
             child: Hero(
               tag: chewieController.videoPlayerController,

@@ -57,7 +57,7 @@ class _MaterialControlsState extends State<MaterialControls> {
         absorbing: _hideStuff,
         child: Column(
           children: <Widget>[
-            chewieController.isFullScreen ? _buildHeader(context, chewieController.title) : new Container(),
+            chewieController.isFullScreen ? _buildHeader(context, chewieController.title) :  Container(),
             _latestValue != null &&
                         !_latestValue.isPlaying &&
                         _latestValue.duration == null ||
@@ -381,23 +381,23 @@ class _MaterialControlsState extends State<MaterialControls> {
   }
 
   AnimatedOpacity _buildHeader(BuildContext context, String title) {
-    return new AnimatedOpacity(
+    return  AnimatedOpacity(
         opacity: _hideStuff ? 0.0 : 1.0,
-        duration: new Duration(milliseconds: 300),
-        child: new Container(
+        duration:  Duration(milliseconds: 300),
+        child:  Container(
             color: darkColor,
             height: barHeight,
-            child: new Row(
+            child:  Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                    new IconButton(
+                     IconButton(
                         onPressed: _onExpandCollapse,
                         color: lightColor,
-                        icon: new Icon(Icons.chevron_left),
+                        icon:  Icon(Icons.chevron_left),
                     ),
-                    new Text(
+                     Text(
                         '$title',
-                        style: new TextStyle(
+                        style:  TextStyle(
                             color: lightColor,
                             fontSize: 18.0,
                         ),
