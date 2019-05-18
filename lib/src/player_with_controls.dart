@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:chewie/src/chewie_player.dart';
 import 'package:chewie/src/cupertino_controls.dart';
-import 'package:chewie/src/material_controls.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -37,7 +36,6 @@ class PlayerWithControls extends StatelessWidget {
             height: MediaQuery.of(context).size.width * 2 / 3,
             child: chewieController.placeholder ?? Container(),
           ),
-          // chewieController.placeholder ?? Container(),
           Center(
             child: Hero(
               tag: chewieController.videoPlayerController,
@@ -62,8 +60,6 @@ class PlayerWithControls extends StatelessWidget {
     return chewieController.showControls
         ? chewieController.customControls != null
             ? chewieController.customControls
-            : Theme.of(context).platform == TargetPlatform.android
-                ? MaterialControls()
                 : CupertinoControls(
                     backgroundColor: Color.fromRGBO(41, 41, 41, 0.7),
                     iconColor: Color.fromARGB(255, 200, 200, 200),

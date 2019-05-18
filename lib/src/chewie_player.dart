@@ -59,9 +59,11 @@ class ChewieState extends State<Chewie> {
 
   void listener() async {
     if (widget.controller.isFullScreen && !_isFullScreen) {
+      print("要全屏了");
       _isFullScreen = true;
       await _pushFullScreenWidget(context);
     } else if (_isFullScreen) {
+      print("要退出全屏了");
       Navigator.of(context).pop();
       _isFullScreen = false;
     }
@@ -76,7 +78,6 @@ class ChewieState extends State<Chewie> {
       ),
     );
   }
-
 
   Widget _buildFullScreenVideo(
       BuildContext context,
