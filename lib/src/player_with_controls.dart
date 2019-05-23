@@ -28,13 +28,19 @@ class PlayerWithControls extends StatelessWidget {
 
   Container _buildPlayerWithControls(
       ChewieController chewieController, BuildContext context) {
+    print("_buildPlayerWithControls");
+
     return Container(
       child: Stack(
         children: <Widget>[
           Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.width * 2 / 3,
-            child: chewieController.placeholder ?? Container(),
+            child: (chewieController.placeholder != null &&
+                    chewieController.videoPlayerController.value.isPlaying ==
+                        false)
+                ? chewieController.placeholder
+                : Container(),
           ),
           Center(
             child: Hero(
@@ -60,10 +66,10 @@ class PlayerWithControls extends StatelessWidget {
     return chewieController.showControls
         ? chewieController.customControls != null
             ? chewieController.customControls
-                : CupertinoControls(
-                    backgroundColor: Color.fromRGBO(41, 41, 41, 0.7),
-                    iconColor: Color.fromARGB(255, 200, 200, 200),
-                  )
+            : CupertinoControls(
+                backgroundColor: Color.fromRGBO(41, 41, 41, 0.7),
+                iconColor: Color.fromARGB(255, 200, 200, 200),
+              )
         : Container();
   }
 

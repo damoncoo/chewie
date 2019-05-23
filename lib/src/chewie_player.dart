@@ -190,6 +190,7 @@ class ChewieController extends ChangeNotifier {
       this.allowFullScreen = true,
       this.allowMuting = true,
       this.systemOverlaysAfterFullScreen = SystemUiOverlay.values,
+      this.bufferTimer,
       this.deviceOrientationsAfterFullScreen = const [
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
@@ -202,6 +203,8 @@ class ChewieController extends ChangeNotifier {
             'You must provide a controller to play a video') {
     _initialize();
   }
+
+  Timer bufferTimer;
 
   final String title;
 
@@ -288,7 +291,24 @@ class ChewieController extends ChangeNotifier {
 
   bool get isFullScreen => _isFullScreen;
 
+  bool isBuffering = false;
+
+  int previous;
+
   Future _initialize() async {
+    bufferTimer = Timer(Duration(milliseconds: 500), () {
+      int current = videoPlayerController.value.position.inSeconds;
+      if (current == previous) {
+        if (isBuffering == false) {
+          isBuffering = true;
+        }
+      } else {
+        if (isBuffering == true) {
+          isBuffering = false;
+        }
+      }
+    });
+
     await videoPlayerController.setLooping(looping);
 
     if ((autoInitialize || autoPlay) &&

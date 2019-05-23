@@ -43,8 +43,8 @@ class _CupertinoControlsState extends State<CupertinoControls> {
   @override
   Widget build(BuildContext context) {
     chewieController = ChewieController.of(context);
-
-    if (controller.value.isBuffering && controller.value.isPlaying) {
+    
+    if (chewieController.isBuffering) {
       return _buildLoadingWidget();
     }
 
