@@ -34,13 +34,18 @@ class Chewie extends StatefulWidget {
   }
 }
 
-class ChewieState extends State<Chewie> {
+class ChewieState extends State<Chewie> with TickerProviderStateMixin {
   bool _isFullScreen = false;
+  Scaffold fullscreenScaffold;
+  AnimationController animationController;
 
   @override
   void initState() {
     super.initState();
     widget.controller.addListener(listener);
+
+    animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
   }
 
   @override
@@ -83,7 +88,7 @@ class ChewieState extends State<Chewie> {
       BuildContext context,
       Animation<double> animation,
       _ChewieControllerProvider controllerProvider) {
-    return Scaffold(
+    fullscreenScaffold = Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Container(
         alignment: Alignment.center,
@@ -91,6 +96,16 @@ class ChewieState extends State<Chewie> {
         child: controllerProvider,
       ),
     );
+
+    return fullscreenScaffold;
+  }
+
+  Widget _defaultRoutePageBuilder2(
+      BuildContext context,
+      Animation<double> animation,
+      Animation<double> secondaryAnimation,
+      _ChewieControllerProvider controllerProvider) {
+    return _buildFullScreenVideo(context, animation, controllerProvider);
   }
 
   AnimatedWidget _defaultRoutePageBuilder(
@@ -111,14 +126,20 @@ class ChewieState extends State<Chewie> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
   ) {
+    final isAndroid = Theme.of(context).platform == TargetPlatform.android;
     var controllerProvider = _ChewieControllerProvider(
       controller: widget.controller,
       child: PlayerWithControls(),
     );
 
     if (widget.controller.routePageBuilder == null) {
-      return _defaultRoutePageBuilder(
-          context, animation, secondaryAnimation, controllerProvider);
+      if (isAndroid) {
+        return _defaultRoutePageBuilder(
+            context, animation, secondaryAnimation, controllerProvider);
+      } else {
+        return _defaultRoutePageBuilder2(
+            context, animation, secondaryAnimation, controllerProvider);
+      }
     }
     return widget.controller.routePageBuilder(
         context, animation, secondaryAnimation, controllerProvider);
@@ -136,9 +157,12 @@ class ChewieState extends State<Chewie> {
     Animation<double> animation,
     Widget child,
   ) {
+    Animation<double> rotate =
+        Tween<double>(begin: 0, end: 0.25).animate(animation);
+
     return RotationTransition(
-      turns: animation,
-      child: widget,
+      turns: rotate,
+      child: child,
     );
   }
 
@@ -209,7 +233,6 @@ class ChewieController extends ChangeNotifier {
       this.allowMuting = true,
       this.systemOverlaysAfterFullScreen = SystemUiOverlay.values,
       this.bufferTimer,
-      this.rotationController,
       this.deviceOrientationsAfterFullScreen = const [
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
@@ -312,13 +335,9 @@ class ChewieController extends ChangeNotifier {
 
   bool isBuffering = false;
 
-  
   int previous;
 
-  AnimationController rotationController;
-
   Future _initialize() async {
-
     bufferTimer = Timer(Duration(milliseconds: 500), () {
       int current = videoPlayerController.value.position.inSeconds;
       if (current == previous) {
@@ -331,8 +350,6 @@ class ChewieController extends ChangeNotifier {
         }
       }
     });
-
-    // rotationController = AnimationController(duration: Duration(milliseconds: 200),vsync: null);
 
     await videoPlayerController.setLooping(looping);
 
