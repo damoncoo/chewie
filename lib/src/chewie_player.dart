@@ -223,6 +223,8 @@ class ChewieController extends ChangeNotifier {
     _initialize();
   }
 
+  Timer bufferTimer;
+
   final String title;
 
   /// The controller for the video you want to play
@@ -310,8 +312,7 @@ class ChewieController extends ChangeNotifier {
 
   bool isBuffering = false;
 
-  Timer bufferTimer;
-
+  
   int previous;
 
   AnimationController rotationController;
