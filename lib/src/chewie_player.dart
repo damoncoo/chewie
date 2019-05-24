@@ -124,12 +124,30 @@ class ChewieState extends State<Chewie> {
         context, animation, secondaryAnimation, controllerProvider);
   }
 
+  RouteTransitionsBuilder _transitionBuilder() {
+    //转场动画
+    return (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation, Widget child) {
+      return _rotateTransition(animation, child);
+    };
+  }
+
+  RotationTransition _rotateTransition(
+    Animation<double> animation,
+    Widget child,
+  ) {
+    return RotationTransition(
+      turns: animation,
+      child: widget,
+    );
+  }
+
   Future<dynamic> _pushFullScreenWidget(BuildContext context) async {
     final isAndroid = Theme.of(context).platform == TargetPlatform.android;
     final TransitionRoute<Null> route = PageRouteBuilder<Null>(
-      settings: RouteSettings(isInitialRoute: false),
-      pageBuilder: _fullScreenRoutePageBuilder,
-    );
+        settings: RouteSettings(isInitialRoute: false),
+        pageBuilder: _fullScreenRoutePageBuilder,
+        transitionsBuilder: isAndroid ? null : _transitionBuilder());
 
     SystemChrome.setEnabledSystemUIOverlays([]);
     if (isAndroid) {
@@ -190,6 +208,8 @@ class ChewieController extends ChangeNotifier {
       this.allowFullScreen = true,
       this.allowMuting = true,
       this.systemOverlaysAfterFullScreen = SystemUiOverlay.values,
+      this.bufferTimer,
+      this.rotationController,
       this.deviceOrientationsAfterFullScreen = const [
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
@@ -288,7 +308,31 @@ class ChewieController extends ChangeNotifier {
 
   bool get isFullScreen => _isFullScreen;
 
+  bool isBuffering = false;
+
+  Timer bufferTimer;
+
+  int previous;
+
+  AnimationController rotationController;
+
   Future _initialize() async {
+
+    bufferTimer = Timer(Duration(milliseconds: 500), () {
+      int current = videoPlayerController.value.position.inSeconds;
+      if (current == previous) {
+        if (isBuffering == false) {
+          isBuffering = true;
+        }
+      } else {
+        if (isBuffering == true) {
+          isBuffering = false;
+        }
+      }
+    });
+
+    // rotationController = AnimationController(duration: Duration(milliseconds: 200),vsync: null);
+
     await videoPlayerController.setLooping(looping);
 
     if ((autoInitialize || autoPlay) &&
