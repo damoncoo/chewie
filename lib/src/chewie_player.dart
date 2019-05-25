@@ -168,10 +168,17 @@ class ChewieState extends State<Chewie> with TickerProviderStateMixin {
 
   Future<dynamic> _pushFullScreenWidget(BuildContext context) async {
     final isAndroid = Theme.of(context).platform == TargetPlatform.android;
-    final TransitionRoute<Null> route = PageRouteBuilder<Null>(
-        settings: RouteSettings(isInitialRoute: false),
-        pageBuilder: _fullScreenRoutePageBuilder,
-        transitionsBuilder: isAndroid ? null : _transitionBuilder());
+    TransitionRoute<Null> route;
+    if (isAndroid) {
+      route = PageRouteBuilder<Null>(
+          settings: RouteSettings(isInitialRoute: false),
+          pageBuilder: _fullScreenRoutePageBuilder);
+    } else {
+      route = PageRouteBuilder<Null>(
+          settings: RouteSettings(isInitialRoute: false),
+          pageBuilder: _fullScreenRoutePageBuilder,
+          transitionsBuilder: _transitionBuilder());
+    }
 
     SystemChrome.setEnabledSystemUIOverlays([]);
     if (isAndroid) {

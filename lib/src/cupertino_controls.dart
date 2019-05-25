@@ -79,9 +79,9 @@ class _CupertinoControlsState extends State<CupertinoControls> {
         absorbing: _hideStuff,
         child: Column(
           children: <Widget>[
-            _buildTopBar(backgroundColor, iconColor, barHeight, buttonPadding),
+            // _buildTopBar(backgroundColor, iconColor, barHeight, buttonPadding),
             _buildHitArea(),
-            _buildBottomBar(backgroundColor, iconColor, barHeight),
+            _buildBottomBar(backgroundColor, iconColor, barHeight, buttonPadding),
           ],
         ),
       ),
@@ -119,6 +119,7 @@ class _CupertinoControlsState extends State<CupertinoControls> {
     Color backgroundColor,
     Color iconColor,
     double barHeight,
+    double buttonPadding
   ) {
     return AnimatedOpacity(
       opacity: _hideStuff ? 0.0 : 1.0,
@@ -156,7 +157,8 @@ class _CupertinoControlsState extends State<CupertinoControls> {
                         // _buildSkipForward(iconColor, barHeight),
                         _buildPosition(iconColor),
                         _buildProgressBar(),
-                        _buildRemaining(iconColor)
+                        _buildRemaining(iconColor),
+                        _buildExpandButton(backgroundColor, iconColor, barHeight, buttonPadding)
                       ],
                     ),
             ),
@@ -397,35 +399,6 @@ class _CupertinoControlsState extends State<CupertinoControls> {
           color: iconColor,
           size: 12.0,
         ),
-      ),
-    );
-  }
-
-  Widget _buildTopBar(
-    Color backgroundColor,
-    Color iconColor,
-    double barHeight,
-    double buttonPadding,
-  ) {
-    return Container(
-      height: barHeight,
-      margin: EdgeInsets.only(
-        top: marginSize,
-        right: marginSize,
-        left: marginSize,
-      ),
-      child: Row(
-        children: <Widget>[
-          chewieController.allowFullScreen
-              ? _buildExpandButton(
-                  backgroundColor, iconColor, barHeight, buttonPadding)
-              : Container(),
-          Expanded(child: Container()),
-          chewieController.allowMuting
-              ? _buildMuteButton(controller, backgroundColor, iconColor,
-                  barHeight, buttonPadding)
-              : Container(),
-        ],
       ),
     );
   }
