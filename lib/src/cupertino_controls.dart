@@ -43,7 +43,7 @@ class _CupertinoControlsState extends State<CupertinoControls> {
   @override
   Widget build(BuildContext context) {
     chewieController = ChewieController.of(context);
-    
+
     if (chewieController.isBuffering) {
       return _buildLoadingWidget();
     }
@@ -81,7 +81,8 @@ class _CupertinoControlsState extends State<CupertinoControls> {
           children: <Widget>[
             // _buildTopBar(backgroundColor, iconColor, barHeight, buttonPadding),
             _buildHitArea(),
-            _buildBottomBar(backgroundColor, iconColor, barHeight, buttonPadding),
+            _buildBottomBar(
+                backgroundColor, iconColor, barHeight, buttonPadding),
           ],
         ),
       ),
@@ -129,18 +130,10 @@ class _CupertinoControlsState extends State<CupertinoControls> {
         alignment: Alignment.bottomCenter,
         margin: EdgeInsets.all(marginSize),
         child: ClipRect(
-          child: BackdropFilter(
-            filter: ui.ImageFilter.blur(
-              sigmaX: 10.0,
-              sigmaY: 10.0,
-            ),
             child: Container(
               height: barHeight,
               decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10.0),
-                ),
+                color: Color.fromARGB(10, 0, 0, 0),             
               ),
               child: chewieController.isLive
                   ? Row(
@@ -162,7 +155,6 @@ class _CupertinoControlsState extends State<CupertinoControls> {
                       ],
                     ),
             ),
-          ),
         ),
       ),
     );
@@ -307,23 +299,21 @@ class _CupertinoControlsState extends State<CupertinoControls> {
     double barHeight,
   ) {
     return GestureDetector(
-      onTap: _playPause,
-      child: Container(
-        height: barHeight,
-        color: Colors.transparent,
-        padding: EdgeInsets.only(
-          left: 10.0,
-          right: 10.0,
-        ),
-        child: Icon(
-          controller.value.isPlaying
-              ? OpenIconicIcons.mediaPause
-              : OpenIconicIcons.mediaPlay,
-          color: iconColor,
-          size: 20.0,
-        ),
-      ),
-    );
+        onTap: _playPause,
+        child: Container(
+            height: barHeight,
+            color: Colors.transparent,
+            padding: EdgeInsets.only(
+              left: 10.0,
+              right: 10.0,
+            ),
+            child: Image(
+              width: 20,
+              height: 20,
+              image: AssetImage(
+                  controller.value.isPlaying ? "assets/icons/pause_s.png" : "assets/icons/play_s.png",
+                  package: "chewie"),
+            )));
   }
 
   Widget _buildPosition(Color iconColor) {
