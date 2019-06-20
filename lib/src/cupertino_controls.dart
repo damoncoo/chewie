@@ -116,12 +116,8 @@ class _CupertinoControlsState extends State<CupertinoControls> {
     super.didChangeDependencies();
   }
 
-  AnimatedOpacity _buildBottomBar(
-    Color backgroundColor,
-    Color iconColor,
-    double barHeight,
-    double buttonPadding
-  ) {
+  AnimatedOpacity _buildBottomBar(Color backgroundColor, Color iconColor,
+      double barHeight, double buttonPadding) {
     return AnimatedOpacity(
       opacity: _hideStuff ? 0.0 : 1.0,
       duration: Duration(milliseconds: 300),
@@ -130,31 +126,32 @@ class _CupertinoControlsState extends State<CupertinoControls> {
         alignment: Alignment.bottomCenter,
         margin: EdgeInsets.all(marginSize),
         child: ClipRect(
-            child: Container(
-              height: barHeight,
-              decoration: BoxDecoration(
-                color: Color.fromARGB(10, 0, 0, 0),             
-              ),
-              child: chewieController.isLive
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        _buildPlayPause(controller, iconColor, barHeight),
-                        _buildLive(iconColor),
-                      ],
-                    )
-                  : Row(
-                      children: <Widget>[
-                        // _buildSkipBack(iconColor, barHeight),
-                        _buildPlayPause(controller, iconColor, barHeight),
-                        // _buildSkipForward(iconColor, barHeight),
-                        _buildPosition(iconColor),
-                        _buildProgressBar(),
-                        _buildRemaining(iconColor),
-                        _buildExpandButton(backgroundColor, iconColor, barHeight, buttonPadding)
-                      ],
-                    ),
+          child: Container(
+            height: barHeight,
+            decoration: BoxDecoration(
+              color: Color.fromARGB(10, 0, 0, 0),
             ),
+            child: chewieController.isLive
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      _buildPlayPause(controller, iconColor, barHeight),
+                      _buildLive(iconColor),
+                    ],
+                  )
+                : Row(
+                    children: <Widget>[
+                      // _buildSkipBack(iconColor, barHeight),
+                      _buildPlayPause(controller, iconColor, barHeight),
+                      // _buildSkipForward(iconColor, barHeight),
+                      _buildPosition(iconColor),
+                      _buildProgressBar(),
+                      _buildRemaining(iconColor),
+                      _buildExpandButton(
+                          backgroundColor, iconColor, barHeight, buttonPadding)
+                    ],
+                  ),
+          ),
         ),
       ),
     );
@@ -192,32 +189,29 @@ class _CupertinoControlsState extends State<CupertinoControls> {
         opacity: _hideStuff ? 0.0 : 1.0,
         duration: Duration(milliseconds: 300),
         child: ClipRect(
-          child: BackdropFilter(
-            filter: ui.ImageFilter.blur(sigmaX: 10.0),
             child: Container(
-              height: barHeight,
-              padding: EdgeInsets.only(
-                left: buttonPadding,
-                right: buttonPadding,
-              ),
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10.0),
-                ),
-              ),
-              child: Center(
-                child: Icon(
-                  chewieController.isFullScreen
-                      ? OpenIconicIcons.fullscreenExit
-                      : OpenIconicIcons.fullscreenEnter,
-                  color: iconColor,
-                  size: 12.0,
-                ),
-              ),
+          height: barHeight,
+          padding: EdgeInsets.only(
+            left: buttonPadding,
+            right: buttonPadding,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
             ),
           ),
-        ),
+          child: Center(
+            child: Image(
+              width: 20,
+              image: AssetImage(
+                  chewieController.isFullScreen == false
+                      ? "assets/icons/full_exit.png"
+                      : "assets/icons/full_screen.png",
+                  package: "chewie"),
+            ),
+          ),
+        )),
       ),
     );
   }
@@ -229,7 +223,6 @@ class _CupertinoControlsState extends State<CupertinoControls> {
             ? _cancelAndRestartTimer
             : () {
                 _hideTimer?.cancel();
-
                 setState(() {
                   _hideStuff = false;
                 });
@@ -311,7 +304,9 @@ class _CupertinoControlsState extends State<CupertinoControls> {
               width: 20,
               height: 20,
               image: AssetImage(
-                  controller.value.isPlaying ? "assets/icons/pause_s.png" : "assets/icons/play_s.png",
+                  controller.value.isPlaying
+                      ? "assets/icons/pause_s.png"
+                      : "assets/icons/play_s.png",
                   package: "chewie"),
             )));
   }
